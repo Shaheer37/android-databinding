@@ -30,20 +30,6 @@ import com.example.android.databinding.basicsample.R
 import com.example.android.databinding.basicsample.data.Popularity
 
 /**
- * A Binding Adapter that is called whenever the value of the attribute `app:popularityIcon`
- * changes. Receives a popularity level that determines the icon and tint color to use.
- */
-@BindingAdapter("app:popularityIcon")
-fun popularityIcon(view: ImageView, popularity: Popularity) {
-
-    val color = getAssociatedColor(popularity, view.context)
-
-    ImageViewCompat.setImageTintList(view, ColorStateList.valueOf(color))
-
-    view.setImageDrawable(getDrawablePopularity(popularity, view.context))
-}
-
-/**
  * A Binding Adapter that is called whenever the value of the attribute `android:progressTint`
  * changes. Depending on the value it determines the color of the progress bar.
  */
@@ -65,7 +51,29 @@ fun tintPopularity(view: ProgressBar, popularity: Popularity) {
  */
 @BindingAdapter(value = ["app:progressScaled", "android:max"], requireAll = true)
 fun setProgress(progressBar: ProgressBar, likes: Int, max: Int) {
-    progressBar.progress = (likes * max / 5).coerceAtMost(max)
+    progressBar.progress = (likes * max / 10).coerceAtMost(max)
+}
+
+/**
+ * A Binding Adapter that is called whenever the value of the attribute `android:progressTint`
+ * changes. Depending on the value it determines the color of the progress bar.
+ */
+@BindingAdapter("app:progressTint")
+fun setProgressTint(progressBar: ProgressBar, popularity: Popularity){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        progressBar.progressTintList = ColorStateList.valueOf(getAssociatedColor(popularity, progressBar.context))
+    }
+}
+
+/**
+ * A Binding Adapter that is called whenever the value of the attribute `app:popularityIcon`
+ * changes. Receives a popularity level that determines the icon and tint color to use.
+ */
+@BindingAdapter("app:popularityIcon")
+fun setPopularityImage(view: ImageView, popularity: Popularity) {
+    val color = getAssociatedColor(popularity, view.context)
+    ImageViewCompat.setImageTintList(view, ColorStateList.valueOf(color))
+    view.setImageDrawable(getDrawablePopularity(popularity, view.context))
 }
 
 /**
